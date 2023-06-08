@@ -6,11 +6,11 @@ const app: Application = express()
 app.use(cors())
 
 // parser
-app.use(express.json())
+          app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // testing
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req: Request, res: any) => {
   res.send('Working Successfully!')
 })
 
