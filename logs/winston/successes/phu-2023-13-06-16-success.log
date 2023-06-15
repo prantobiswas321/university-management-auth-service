@@ -1,0 +1,18 @@
+{
+  message: 'Database is connected successfully',
+  level: 'info',
+  label: 'PH',
+  timestamp: '2023-06-13T10:34:48.590Z'
+}
+{
+  message: 'Application is listening on port 5000',
+  level: 'info',
+  label: 'PH',
+  timestamp: '2023-06-13T10:34:48.597Z'
+}
+Tue Jun 13 2023 16:35:51 [PH] info: Database is connected successfully
+Tue Jun 13 2023 16:35:51 [PH] info: Application is listening on port 5000
+Tue Jun 13 2023 16:38:30 [PH] info: Database is connected successfully
+Tue Jun 13 2023 16:38:30 [PH] info: Application is listening on port 5000
+Tue Jun 13 2023 16:39:36 [PH] info: Database is connected successfully
+Tue Jun 13 2023 16:39:36 [PH] info: Application is listening on port 5000
