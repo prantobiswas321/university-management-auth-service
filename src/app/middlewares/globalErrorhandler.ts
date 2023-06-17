@@ -1,10 +1,12 @@
+import { ZodError } from 'zod';
 /* eslint-disable no-console */
-import { ErrorRequestHandler, NextFunction, Request, Response } from 'express'
-import config from '../../config'
-import { IgenericErrorMessages } from '../../interfaces/error'
-import handlevalidationError from '../../errors/handleValidationError'
-import ApiError from '../../errors/ApiError'
-import { errorlogger } from '../../shared/logger'
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
+import config from '../../config';
+import { IGenericErrorMessages } from '../../interfaces/error';
+import handleValidationError from '../../errors/handleValidationError';
+import ApiError from '../../errors/ApiError';
+import { errorlogger } from '../../shared/logger';
+import handleZodError from '../../errors/handleZodError';
 
 const globalErrorhandler: ErrorRequestHandler = (
   err,
@@ -15,20 +17,25 @@ const globalErrorhandler: ErrorRequestHandler = (
   // eslint-disable-next-line no-unused-expressions
   config.env === 'development'
     ? console.log('globalErrorHandler ~', err)
-    : errorlogger.error('globalErrorHandler ~', err)
+    : errorlogger.error('globalErrorHandler ~', err);
 
-  let statusCode = 500
-  let message = 'Something went wrong'
-  let errorMessages: IgenericErrorMessages[] = []
+  let statusCode = 500;
+  let message = 'Something went wrong';
+  let errorMessages: IGenericErrorMessages[] = [];
 
   if (err?.name === 'validationError') {
-    const simplifiedError = handlevalidationError(err)
-    statusCode = simplifiedError.statusCode
-    message = simplifiedError.message
-    errorMessages = simplifiedError.errorMessages
+    const simplifiedError = handleValidationError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorMessages = simplifiedError?.errorMessages;
+  } else if (err instanceof ZodError) {
+    const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
   } else if (err instanceof ApiError) {
-    statusCode = err?.statusCode
-    message = err?.message
+    statusCode = err?.statusCode;
+    message = err.message;
     errorMessages = err?.message
       ? [
           {
@@ -36,9 +43,9 @@ const globalErrorhandler: ErrorRequestHandler = (
             message: err?.message,
           },
         ]
-      : []
+      : [];
   } else if (err instanceof Error) {
-    message = err?.message
+    message = err?.message;
     errorMessages = err?.message
       ? [
           {
@@ -46,7 +53,7 @@ const globalErrorhandler: ErrorRequestHandler = (
             message: err?.message,
           },
         ]
-      : []
+      : [];
   }
 
   res.status(statusCode).json({
@@ -54,9 +61,9 @@ const globalErrorhandler: ErrorRequestHandler = (
     message,
     errorMessages,
     statck: config.env !== 'production' ? err?.stack : undefined,
-  })
+  });
 
-  next()
-}
+  next();
+};
 
-export default globalErrorhandler
+export default globalErrorhandler;

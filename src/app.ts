@@ -1,18 +1,18 @@
-import express, { Application } from 'express'
-import cors from 'cors'
-import globalErrorhandler from './app/middlewares/globalErrorhandler'
-import { UserRoutes } from './app/modules/users/user.route'
+import express, { Application } from 'express';
+import cors from 'cors';
+import globalErrorhandler from './app/middlewares/globalErrorhandler';
+import { UserRoutes } from './app/modules/user/user.route';
 
-const app: Application = express()
+const app: Application = express();
 
-app.use(cors())
+app.use(cors());
 
 // parser
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Applications routes
-app.use('/api/v1/users', UserRoutes)
+app.use('/api/v1/users', UserRoutes);
 
 // testing
 
@@ -40,6 +40,6 @@ app.use('/api/v1/users', UserRoutes)
 // })
 
 // global error handler
-app.use(globalErrorhandler)
+app.use(globalErrorhandler);
 
-export default app
+export default app;
